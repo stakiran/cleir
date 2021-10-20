@@ -15,9 +15,18 @@ FULLPATH_SCRIPT = %A_ScriptFullPath%
 
 ____main____:
 
+prev_clipboard = %clipboard%
+
 Loop
 {
-  MsgBox %clipboard%
+  current_clipboard = %clipboard%
+
+  if prev_clipboard <> %current_clipboard%
+  {
+    prev_clipboard = %current_clipboard%
+    MsgBox %clipboard%
+  }
+
   Sleep, 1000
 }
 
