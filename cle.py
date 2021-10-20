@@ -53,9 +53,17 @@ class Editor:
     def __init__(self, s):
         self._original_str = s
 
+        self._testmode = False
+
     @property
     def original_string(self):
         return self._original_str
+
+    def use_testmode(self):
+        self._testmode = True
+
+    def _is_testmode(self):
+        return self._testmode
 
     def is_satisfied(self):
         raise NotImplementedError
@@ -68,6 +76,10 @@ class Editor:
 
     def edit(self):
         s = self._generate_newstring()
+
+        if self._is_testmode():
+            return s
+
         Util.str2clipboard(s)
 
 class BoxDrivePathPersonalization(Editor):
@@ -105,7 +117,6 @@ class BoxDrivePathPersonalization(Editor):
         newpath = os.path.join(self.YOUR_PREFIX, rest)
 
         return newpath
-
 
 if __name__=='__main__':
     original_cbstr = Util.clipboard2str()
