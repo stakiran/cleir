@@ -189,10 +189,7 @@ class AmazonUrlSimplification(Editor):
         newstr = url
         return newstr
 
-if __name__=='__main__':
-    original_cbstr = Util.clipboard2str()
-    s = original_cbstr
-
+def editor_chain(original_string, use_testmode=False):
     classnames = Util.get_toplevel_function_names_of_me()
     removers = ['Util', 'Editor']
     for remover in removers:
@@ -200,9 +197,22 @@ if __name__=='__main__':
 
     for classname in classnames:
         inst = Util.new_with_classname_in_global(classname, s)
+
         if not inst.is_satisfied():
             continue
         if inst.is_already_generated():
             continue
-        inst.edit()
+
+        if use_testmode:
+            inst.use_testmode()
+        response = inst.edit()
+        if use_testmode:
+            return response
         break
+
+if __name__=='__main__':
+    original_cbstr = Util.clipboard2str()
+    s = original_cbstr
+
+    use_testmode = False
+    editor_chain(s, use_testmode)
