@@ -38,5 +38,18 @@ class TestHelper(unittest.TestCase):
         actual = inst.edit()
         self.assertEqual(expect, actual)
 
+    def test_chain(self):
+        use_testmode = True
+
+        s = 'not target string'
+        expect = None
+        actual = cle.editor_chain(s, use_testmode)
+        self.assertEqual(expect, actual)
+
+        s = 'C:\\Users\\XXXX\\Box\\projectXYZ\\01.管理\\WBS.xlsx'
+        expect = '%userprofile%\\projectXYZ\\01.管理\\WBS.xlsx'
+        actual = cle.editor_chain(s, use_testmode)
+        self.assertEqual(expect, actual)
+
 if __name__ == '__main__':
     unittest.main()

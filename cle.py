@@ -196,7 +196,7 @@ def editor_chain(original_string, use_testmode=False):
         classnames.remove(remover)
 
     for classname in classnames:
-        inst = Util.new_with_classname_in_global(classname, s)
+        inst = Util.new_with_classname_in_global(classname, original_string)
 
         if not inst.is_satisfied():
             continue
