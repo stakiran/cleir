@@ -49,6 +49,22 @@ class Util:
     def str2clipboard(s):
         libclipboard.Clipboard.set(s)
 
+    @staticmethod
+    def get_toplevel_function_names_of_me():
+        global_objs = globals()
+        callable_names = [key for key in globals() if callable(global_objs[key])]
+        toplevel_function_names = [name for name in callable_names if name[0].isupper()]
+        return toplevel_function_names
+
+    @staticmethod
+    def new_with_classname_in_global(classname, *args):
+        """ @exception KeyError if funcname not found. """
+        try:
+            c = globals()[classname]
+        except KeyError:
+            raise
+        return c(*args)
+
 class Editor:
     def __init__(self, s):
         self._original_str = s
@@ -177,12 +193,16 @@ if __name__=='__main__':
     original_cbstr = Util.clipboard2str()
     s = original_cbstr
 
-    inst = BoxDrivePathPersonalization(s)
-    if not inst.is_satisfied():
-        print('not safisfied')
-        sys.exit(0)
-    if inst.is_already_generated():
-        print('already generated')
-        sys.exit(0)
-    inst.edit()
-    print('edit!')
+    classnames = Util.get_toplevel_function_names_of_me()
+    removers = ['Util', 'Editor']
+    for remover in removers:
+        classnames.remove(remover)
+
+    for classname in classnames:
+        inst = Util.new_with_classname_in_global(classname, s)
+        if not inst.is_satisfied():
+            continue
+        if inst.is_already_generated():
+            continue
+        inst.edit()
+        break
