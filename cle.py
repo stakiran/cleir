@@ -118,6 +118,61 @@ class BoxDrivePathPersonalization(Editor):
 
         return newpath
 
+class AmazonUrlSimplification(Editor):
+    def __init__(self, s):
+        super().__init__(s)
+
+        self.URL_PREFIX = 'https://www.amazon.co.jp/dp/'
+
+    def is_satisfied(self):
+        s = self.original_string
+        lines = Util.str2lines(s)
+
+        is_multiline = len(lines)>=2
+        if is_multiline:
+            return False
+
+        path = lines[0]
+        path = path.lower()
+        is_prefix_correct = path.startswith(self.URL_PREFIX)
+        if is_prefix_correct:
+            return True
+        return False
+
+    def is_already_generated(self):
+        prefix_len = len('https://www.amazon.co.jp/dp/')
+        #isbn_or_asin_len_1 = 10
+        isbn_or_asin_len_2 = 13
+
+        generated_len_minimum = prefix_len + isbn_or_asin_len_2
+
+        s = self.original_string
+        if len(s) <= generated_len_minimum:
+            return True
+        return False
+
+    def _generate_newstring(self):
+        # 取り出すのは isbn or asin
+        # 10 or 13 桁の英数字
+        # see: https://www.amazon.co.jp/gp/help/customer/display.html?nodeId=201889580
+
+        s = self.original_string
+
+        parts = s.split('/')
+        body = ''
+        for part in parts:
+            if len(part)!=10 and len(part)!=13:
+                continue
+            if not(part.isalnum()):
+                continue
+            body = part
+            break
+
+        prefix = self.URL_PREFIX
+        url = prefix + body
+        newstr = url
+        return newstr
+
 if __name__=='__main__':
     original_cbstr = Util.clipboard2str()
     s = original_cbstr
