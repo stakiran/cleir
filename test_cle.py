@@ -63,5 +63,10 @@ class TestHelper(unittest.TestCase):
         actual = cle.editor_chain(s, use_testmode)
         self.assertEqual(expect, actual)
 
+        s = 'ttp://www.jasst.jp/symposium/jasst19tokyo/pdf/B3-1.pdf'
+        expect = 'http://www.jasst.jp/symposium/jasst19tokyo/pdf/B3-1.pdf'
+        actual = cle.editor_chain(s, use_testmode)
+        self.assertEqual(expect, actual)
+
 if __name__ == '__main__':
     unittest.main()

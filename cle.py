@@ -187,6 +187,38 @@ class AmazonUrlSimplification(Editor):
         newstr = url
         return newstr
 
+class TtpToHttp(Editor):
+    def __init__(self, s):
+        super().__init__(s)
+
+        self.PREFIX = 'ttp://'
+        self.PREFIX_ALREADY = 'http://'
+
+    def is_satisfied(self):
+        s = self.original_string
+        lines = Util.str2lines(s)
+
+        is_multiline = len(lines)>=2
+        if is_multiline:
+            return False
+
+        path = lines[0]
+        path = path.lower()
+        is_prefix_correct = path.startswith(self.PREFIX)
+        if is_prefix_correct:
+            return True
+        return False
+
+    def is_already_generated(self):
+        path = self.original_string
+        return path.startswith(self.PREFIX_ALREADY)
+
+    def _generate_newstring(self):
+        s = self.original_string
+        ttp_url = s
+        newstr =  'h{}'.format(ttp_url)
+        return newstr
+
 def editor_chain(original_string, use_testmode=False):
     classnames = Util.get_toplevel_function_names_of_me()
     removers = ['Util', 'Editor']
