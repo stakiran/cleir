@@ -139,6 +139,7 @@ class AmazonUrlSimplification(Editor):
         super().__init__(s)
 
         self.URL_PREFIX = 'https://www.amazon.co.jp/dp/'
+        self.URL_PREFIX_FOR_VALIDATION = 'https://www.amazon.co.jp/'
 
     def is_satisfied(self):
         s = self.original_string
@@ -150,13 +151,13 @@ class AmazonUrlSimplification(Editor):
 
         path = lines[0]
         path = path.lower()
-        is_prefix_correct = path.startswith(self.URL_PREFIX)
+        is_prefix_correct = path.startswith(self.URL_PREFIX_FOR_VALIDATION)
         if is_prefix_correct:
             return True
         return False
 
     def is_already_generated(self):
-        prefix_len = len('https://www.amazon.co.jp/dp/')
+        prefix_len = len(self.URL_PREFIX)
         #isbn_or_asin_len_1 = 10
         isbn_or_asin_len_2 = 13
 
