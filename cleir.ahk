@@ -24,7 +24,7 @@ Loop
   if prev_clipboard <> %current_clipboard%
   {
     prev_clipboard = %current_clipboard%
-    MsgBox %clipboard%
+    Run, pythonw %BASEDIR%\cle.py
   }
 
   Sleep, 1000
